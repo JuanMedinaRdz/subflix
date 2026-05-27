@@ -1,6 +1,7 @@
 "use client";
 import { Bell, Search, Command } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { UserMenu } from "./user-menu";
 
 export function Topbar({ title, subtitle }: { title: string; subtitle?: string }) {
   return (
@@ -25,9 +26,7 @@ export function Topbar({ title, subtitle }: { title: string; subtitle?: string }
         <Button variant="ghost" size="icon" aria-label="Notifications">
           <Bell className="h-4 w-4" />
         </Button>
-        <div className="h-9 w-9 rounded-full gradient-brand flex items-center justify-center text-xs font-semibold text-white ring-2 ring-background">
-          JC
-        </div>
+        <UserMenu />
       </div>
     </header>
   );
