@@ -1,5 +1,8 @@
 # Subflix — Subscription Analytics Platform
 
+[![CI](https://github.com/JuanMedinaRdz/subflix/actions/workflows/ci.yml/badge.svg)](https://github.com/JuanMedinaRdz/subflix/actions/workflows/ci.yml)
+
+
 > A premium-looking SaaS dashboard to track, analyze and control your digital subscriptions.
 > Built as a portfolio piece to showcase modern frontend engineering, clean architecture and QA automation skills.
 
