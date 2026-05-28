@@ -38,6 +38,10 @@ jobs:
             .next
             public
           retention-days: 1
+          # v4 excludes dot-prefixed paths by default — without this the
+          # entire .next directory is silently dropped from the artifact
+          # and the downstream e2e job can't start `npm run start`.
+          include-hidden-files: true
 
   e2e:
     name: Playwright e2e
