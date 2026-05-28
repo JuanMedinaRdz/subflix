@@ -6,7 +6,14 @@
 > A premium-looking SaaS dashboard to track, analyze and control your digital subscriptions.
 > Built as a portfolio piece to showcase modern frontend engineering, clean architecture and QA automation skills.
 
-![Subflix screenshot placeholder](./docs/screenshot-dashboard.png)
+![Subflix dashboard](./docs/dashboard_subflix.png)
+
+<table>
+  <tr>
+    <td align="center"><a href="./docs/analytics_subflix.png"><img src="./docs/analytics_subflix.png" alt="Analytics" width="100%"/></a><br/><sub><b>Analytics</b></sub></td>
+    <td align="center"><a href="./docs/calendar_subflix.png"><img src="./docs/calendar_subflix.png" alt="Renewals calendar" width="100%"/></a><br/><sub><b>Renewals calendar</b></sub></td>
+  </tr>
+</table>
 
 ---
 
