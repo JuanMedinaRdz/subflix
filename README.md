@@ -163,21 +163,7 @@ Components in [`src/components/ui/`](src/components/ui/) follow the shadcn conve
 
 ---
 
-## Roadmap
 
-The current release is **Phase 1** of a larger plan. Future phases:
-
-| Phase | Scope                                                                  |
-| ----- | ---------------------------------------------------------------------- |
-| 2     | Supabase Auth (login / signup / password reset) + protected routes     |
-| 3     | Supabase Postgres + Row Level Security replacing the localStorage layer|
-| 4     | Notification system (toast + scheduled email/push reminders)           |
-| 5     | Playwright e2e suite: Page Object Model, retries, parallel, reports    |
-| 6     | In-app Testing dashboard surfacing the latest Playwright results       |
-| 7     | GitHub Actions: lint → typecheck → build → playwright → deploy         |
-| 8     | i18n (en/es), settings page, currency support, accessibility audit     |
-
----
 
 ## QA Automation
 
