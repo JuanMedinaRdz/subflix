@@ -169,29 +169,63 @@ The current release is **Phase 1** of a larger plan. Future phases:
 
 ---
 
-## QA Automation (planned)
+## QA Automation
 
-The repo is already structured to plug Playwright in cleanly:
+Subflix ships with a full Playwright e2e suite — **21 specs across 6 files**,
+running on Chromium desktop + mobile Chrome (~38 tests total) on every push
+via GitHub Actions.
 
-- Stable selectors via `data-testid` already exist on key elements
-  (`metric-monthly`, `subscription-card`, `add-subscription`, `form-name`, …).
-- Domain logic isolated in `lib/subscriptions.ts` for fast unit tests.
-- Mock data layer means tests don’t need a backend to run.
+### Scripts
 
-Planned structure:
+```bash
+npm run test:e2e          # headless, all projects
+npm run test:e2e:ui       # interactive Playwright UI
+npm run test:e2e:headed   # headed browsers
+npm run test:e2e:report   # open last HTML report
+```
+
+### Architecture
 
 ```
 tests/
 ├─ e2e/
-│  ├─ auth.spec.ts
-│  ├─ dashboard.spec.ts
-│  ├─ subscriptions.spec.ts
-│  └─ calendar.spec.ts
-├─ pages/                # Page Object Model
-│  ├─ DashboardPage.ts
-│  └─ SubscriptionsPage.ts
-└─ fixtures/
+│  ├─ smoke.spec.ts          # every public route boots without runtime errors
+│  ├─ navigation.spec.ts     # sidebar walks all sections
+│  ├─ dashboard.spec.ts      # metrics, hero, tile rows
+│  ├─ subscriptions.spec.ts  # CRUD + search + persistence
+│  ├─ login.spec.ts          # form UI + disabled state
+│  └─ responsive.spec.ts     # mobile vs desktop layout
+└─ pages/                    # Page Object Model
+   ├─ BasePage.ts            # shared navigation + topbar locators
+   ├─ DashboardPage.ts
+   ├─ SubscriptionsPage.ts
+   ├─ LoginPage.ts
+   └─ CalendarPage.ts
 ```
+
+Highlights:
+
+- **Page Object Model** with a `BasePage` for shared layout locators.
+- **Stable selectors** via `data-testid` (`metric-monthly`, `subscription-card`,
+  `add-subscription`, `form-name`, `topbar-signin`, …).
+- **Auto-managed dev server** — `playwright.config.ts` boots `npm run dev`
+  locally or `npm run start` in CI; no manual coordination.
+- **CI tuning** — 2 retries, 2 workers, screenshots + video on failure,
+  HTML + JSON + GitHub annotations.
+- **Mobile coverage** with the `Pixel 7` device profile.
+- **Tests run in demo mode** (no Supabase env vars) so they're hermetic
+  and don't need credentials in CI.
+
+### CI/CD — GitHub Actions
+
+`.github/workflows/ci.yml` runs on every push to `main` and on every PR:
+
+1. **quality** job: `npm ci` → `typecheck` → `build` (uploads `.next` artifact).
+2. **e2e** job: downloads the build, restores cached Playwright browsers,
+   runs the suite, uploads the HTML report as an artifact (14-day retention).
+
+Per-version browser caching means cold installs only happen when Playwright
+itself bumps versions.
 
 ---
 
