@@ -14,8 +14,11 @@ export class LoginPage extends BasePage {
   get demoLink() {
     return this.page.getByRole("link", { name: /Try the demo without signing in/i });
   }
-  get checkInboxMessage() {
-    return this.page.getByRole("heading", { name: "Check your inbox" });
+  get enterCodeMessage() {
+    return this.page.getByRole("heading", { name: "Enter your code" });
+  }
+  get code() {
+    return this.page.getByTestId("login-code");
   }
 
   async submitEmail(email: string) {

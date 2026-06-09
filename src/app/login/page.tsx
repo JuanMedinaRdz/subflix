@@ -1,33 +1,71 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowRight, Mail, Sparkles, Loader2, CheckCircle2 } from "lucide-react";
+import {
+  ArrowRight,
+  Mail,
+  Sparkles,
+  Loader2,
+  KeyRound,
+  ArrowLeft
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/use-auth";
 
-export default function LoginPage() {
-  const { signInWithMagicLink, configured } = useAuth();
-  const [email, setEmail] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
-    "idle"
-  );
-  const [error, setError] = useState<string | null>(null);
+type Step = "email" | "code";
 
-  const handleSubmit = async (e: React.FormEvent) => {
+export default function LoginPage() {
+  const { sendOtp, verifyOtp, configured } = useAuth();
+  const router = useRouter();
+  const [step, setStep] = useState<Step>("email");
+  const [email, setEmail] = useState("");
+  const [code, setCode] = useState("");
+  const [status, setStatus] = useState<
+    "idle" | "sending" | "verifying" | "error"
+  >("idle");
+  const [error, setError] = useState<string | null>(null);
+  const codeInputRef = useRef<HTMLInputElement>(null);
+
+  const handleSendCode = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
     setStatus("sending");
     setError(null);
-    const { error } = await signInWithMagicLink(email.trim());
+    const { error } = await sendOtp(email.trim());
     if (error) {
       setError(error);
       setStatus("error");
     } else {
-      setStatus("sent");
+      setStatus("idle");
+      setStep("code");
+      // Focus the code field once it renders.
+      setTimeout(() => codeInputRef.current?.focus(), 50);
     }
+  };
+
+  const handleVerify = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (code.length !== 6) return;
+    setStatus("verifying");
+    setError(null);
+    const { error } = await verifyOtp(email.trim(), code);
+    if (error) {
+      setError(error);
+      setStatus("error");
+    } else {
+      router.push("/");
+    }
+  };
+
+  const resetToEmail = () => {
+    setStep("email");
+    setCode("");
+    setError(null);
+    setStatus("idle");
   };
 
   return (
@@ -52,34 +90,92 @@ export default function LoginPage() {
         </div>
 
         <div className="rounded-2xl glass p-8">
-          {status === "sent" ? (
-            <div className="flex flex-col items-center text-center gap-3 py-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-success/15 text-success">
-                <CheckCircle2 className="h-6 w-6" />
+          {step === "code" ? (
+            <>
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-500/15 text-brand-400 mb-4">
+                <KeyRound className="h-6 w-6" />
               </div>
-              <h1 className="text-xl font-semibold">Check your inbox</h1>
-              <p className="text-sm text-muted-foreground">
-                We sent a magic link to <span className="text-foreground font-medium">{email}</span>.
-                Click it to sign in.
+              <h1 className="text-2xl font-semibold tracking-tight">
+                Enter your code
+              </h1>
+              <p className="text-sm text-muted-foreground mt-1">
+                We sent a 6-digit code to{" "}
+                <span className="text-foreground font-medium">{email}</span>.
               </p>
-              <button
-                onClick={() => {
-                  setStatus("idle");
-                  setEmail("");
-                }}
-                className="mt-2 text-xs text-muted-foreground underline hover:text-foreground"
-              >
-                Use a different email
-              </button>
-            </div>
+
+              <form onSubmit={handleVerify} className="mt-6 space-y-4">
+                <div className="space-y-1.5">
+                  <Label htmlFor="code">Verification code</Label>
+                  <Input
+                    id="code"
+                    ref={codeInputRef}
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    pattern="[0-9]*"
+                    maxLength={6}
+                    required
+                    placeholder="123456"
+                    className="text-center text-2xl font-semibold tracking-[0.5em]"
+                    value={code}
+                    onChange={(e) =>
+                      setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
+                    }
+                    disabled={status === "verifying"}
+                    data-testid="login-code"
+                  />
+                </div>
+
+                {error && (
+                  <p className="text-xs text-destructive" role="alert">
+                    {error}
+                  </p>
+                )}
+
+                <Button
+                  type="submit"
+                  className="w-full"
+                  disabled={code.length !== 6 || status === "verifying"}
+                  data-testid="login-verify"
+                >
+                  {status === "verifying" ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" /> Verifying...
+                    </>
+                  ) : (
+                    <>
+                      Verify & sign in <ArrowRight className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+
+                <div className="flex items-center justify-between text-xs">
+                  <button
+                    type="button"
+                    onClick={resetToEmail}
+                    className="flex items-center gap-1 text-muted-foreground hover:text-foreground"
+                  >
+                    <ArrowLeft className="h-3 w-3" /> Change email
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleSendCode}
+                    disabled={status === "sending"}
+                    className="text-muted-foreground underline hover:text-foreground disabled:opacity-50"
+                  >
+                    {status === "sending" ? "Sending..." : "Resend code"}
+                  </button>
+                </div>
+              </form>
+            </>
           ) : (
             <>
               <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Get a one-time magic link by email — no password needed.
+                Get a one-time 6-digit code by email — no password needed.
               </p>
 
-              <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              <form onSubmit={handleSendCode} className="mt-6 space-y-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="email">Email</Label>
                   <div className="relative">
@@ -123,11 +219,12 @@ export default function LoginPage() {
                 >
                   {status === "sending" ? (
                     <>
-                      <Loader2 className="h-4 w-4 animate-spin" /> Sending link...
+                      <Loader2 className="h-4 w-4 animate-spin" /> Sending
+                      code...
                     </>
                   ) : (
                     <>
-                      Send magic link <ArrowRight className="h-4 w-4" />
+                      Send code <ArrowRight className="h-4 w-4" />
                     </>
                   )}
                 </Button>

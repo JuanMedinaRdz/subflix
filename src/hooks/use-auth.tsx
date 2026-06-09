@@ -14,7 +14,10 @@ type AuthState = {
   user: User | null;
   loading: boolean;
   configured: boolean;
-  signInWithMagicLink: (email: string) => Promise<{ error: string | null }>;
+  /** Sends a 6-digit one-time code to the given email. */
+  sendOtp: (email: string) => Promise<{ error: string | null }>;
+  /** Verifies the 6-digit code and opens a session on success. */
+  verifyOtp: (email: string, token: string) => Promise<{ error: string | null }>;
   signOut: () => Promise<void>;
 };
 
@@ -52,15 +55,22 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       user,
       loading,
       configured: isSupabaseConfigured,
-      async signInWithMagicLink(email) {
+      async sendOtp(email) {
         if (!supabase) return { error: "Auth is not configured." };
-        const redirect =
-          typeof window !== "undefined"
-            ? `${window.location.origin}/auth/callback`
-            : undefined;
+        // No `emailRedirectTo`: this makes Supabase deliver a numeric code
+        // (the `{{ .Token }}` template) instead of a magic link.
         const { error } = await supabase.auth.signInWithOtp({
           email,
-          options: { emailRedirectTo: redirect }
+          options: { shouldCreateUser: true }
+        });
+        return { error: error?.message ?? null };
+      },
+      async verifyOtp(email, token) {
+        if (!supabase) return { error: "Auth is not configured." };
+        const { error } = await supabase.auth.verifyOtp({
+          email,
+          token,
+          type: "email"
         });
         return { error: error?.message ?? null };
       },
