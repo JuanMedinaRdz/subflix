@@ -49,7 +49,7 @@ export function SubscriptionRow({
       <div className="flex items-end justify-between gap-3 mb-3 px-1">
         <div className="min-w-0">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg md:text-xl font-semibold tracking-tight">
+            <h2 className="font-display text-xl md:text-2xl font-bold tracking-tight">
               {title}
             </h2>
             {badge && (

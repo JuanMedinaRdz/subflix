@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { CalendarDays, Pause, Pencil, Play } from "lucide-react";
 import { SubLogo } from "./sub-logo";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ export function SubscriptionTile({
   onToggle?: () => void;
   priority?: boolean;
 }) {
+  const reduce = useReducedMotion();
   const d = daysUntil(sub.nextRenewal);
   const paused = sub.status === "paused";
 
@@ -45,7 +46,7 @@ export function SubscriptionTile({
     <motion.div
       data-testid="subscription-tile"
       data-sub-id={sub.id}
-      whileHover={{ scale: 1.06, zIndex: 20 }}
+      whileHover={reduce ? undefined : { scale: 1.06, zIndex: 20 }}
       transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
         "group relative w-[220px] sm:w-[240px] md:w-[260px] shrink-0 aspect-[16/10] rounded-xl overflow-hidden cursor-pointer",
@@ -78,7 +79,7 @@ export function SubscriptionTile({
           size={48}
           className="!rounded-2xl"
         />
-        <span className="text-sm font-semibold tracking-tight text-white/90">
+        <span className="font-display text-base font-bold tracking-tight text-white/95">
           {sub.name}
         </span>
         <Badge variant={renewalBadge.variant}>{renewalBadge.label}</Badge>

@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   MoreHorizontal,
   Pencil,
@@ -31,6 +31,7 @@ export function SubscriptionCard({
   onDelete: () => void;
   onToggle: () => void;
 }) {
+  const reduce = useReducedMotion();
   const d = daysUntil(sub.nextRenewal);
   const renewalBadge =
     sub.status === "paused"
@@ -44,10 +45,10 @@ export function SubscriptionCard({
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 8 }}
+      initial={reduce ? false : { opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.96 }}
-      whileHover={{ y: -2 }}
+      exit={reduce ? undefined : { opacity: 0, scale: 0.96 }}
+      whileHover={reduce ? undefined : { y: -2 }}
       transition={{ duration: 0.25 }}
       data-testid="subscription-card"
       data-sub-id={sub.id}
@@ -64,7 +65,9 @@ export function SubscriptionCard({
         <div className="flex items-center gap-3 min-w-0">
           <SubLogo name={sub.name} logo={sub.logo} color={sub.color} size={44} />
           <div className="min-w-0">
-            <h3 className="font-semibold text-base truncate">{sub.name}</h3>
+            <h3 className="font-display text-base font-bold truncate">
+              {sub.name}
+            </h3>
             <p className="text-xs text-muted-foreground truncate">
               {sub.description ?? sub.category}
             </p>

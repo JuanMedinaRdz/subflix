@@ -1,8 +1,12 @@
 node_modules
 .next
 tsconfig.tsbuildinfo
-.claude/settings.local.json
 out
+
+# Claude Code / agent tooling (local dev environment, not part of the app)
+.claude/
+.agents/
+skills-lock.json
 .env*
 !.env.example
 .DS_Store

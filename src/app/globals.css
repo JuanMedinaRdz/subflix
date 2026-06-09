@@ -27,25 +27,27 @@
   }
 
   .dark {
-    --background: 224 30% 4%;
-    --foreground: 210 40% 98%;
-    --card: 224 25% 7%;
-    --card-foreground: 210 40% 98%;
-    --primary: 226 100% 64%;
-    --primary-foreground: 222 47% 11%;
-    --secondary: 224 20% 12%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 224 20% 12%;
-    --muted-foreground: 220 9% 60%;
-    --accent: 224 20% 14%;
-    --accent-foreground: 210 40% 98%;
+    /* Cinematic catalogue chrome: neutral near-black. Saturated color comes
+       from each subscription's poster artwork, not from the surface. */
+    --background: 240 9% 4%;
+    --foreground: 0 0% 98%;
+    --card: 240 7% 7%;
+    --card-foreground: 0 0% 98%;
+    --primary: 252 90% 66%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 240 6% 12%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 6% 12%;
+    --muted-foreground: 240 5% 62%;
+    --accent: 240 6% 14%;
+    --accent-foreground: 0 0% 98%;
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
     --success: 142 65% 50%;
     --warning: 38 92% 55%;
-    --border: 224 20% 14%;
-    --input: 224 20% 14%;
-    --ring: 226 100% 64%;
+    --border: 240 6% 14%;
+    --input: 240 6% 14%;
+    --ring: 252 90% 66%;
   }
 
   * {
@@ -56,14 +58,22 @@
     @apply bg-background text-foreground antialiased;
     font-feature-settings: "rlig" 1, "calt" 1, "ss01" 1;
   }
+  /* Neutral cinematic backdrop: a single soft top light + vertical falloff.
+     No saturated mesh blobs (that was the AI-glow tell). */
   body {
     background-image:
-      radial-gradient(circle at 15% 0%, hsl(226 100% 64% / 0.10), transparent 40%),
-      radial-gradient(circle at 90% 10%, hsl(280 100% 64% / 0.08), transparent 45%),
-      radial-gradient(circle at 50% 100%, hsl(180 100% 50% / 0.05), transparent 55%);
+      radial-gradient(120% 70% at 50% -10%, hsl(240 12% 13% / 0.7), transparent 60%),
+      linear-gradient(180deg, hsl(240 9% 5%) 0%, hsl(240 10% 3%) 100%);
     background-attachment: fixed;
   }
 }
+
+/* SHAPE LOCK (Section 4.4): one radius system across the whole shell.
+   - Big surfaces (hero, panels):  rounded-2xl
+   - Posters / tiles / cards:      rounded-xl
+   - Small interactive (nav, btn): rounded-lg
+   - Pills / badges / icon-buttons: rounded-full
+   Do not introduce other radii without updating this rule. */
 
 @layer components {
   .glass {
@@ -80,10 +90,15 @@
     @apply bg-clip-text text-transparent bg-gradient-to-br from-white via-white to-white/60;
   }
   .gradient-brand {
-    background: linear-gradient(135deg, hsl(226 100% 64%) 0%, hsl(280 100% 64%) 100%);
+    background: linear-gradient(135deg, hsl(252 90% 66%) 0%, hsl(286 84% 62%) 100%);
   }
   .ring-glow {
-    box-shadow: 0 0 0 1px hsl(226 100% 64% / 0.4), 0 0 24px hsl(226 100% 64% / 0.25);
+    box-shadow: 0 0 0 1px hsl(252 90% 66% / 0.4), 0 0 24px hsl(252 90% 66% / 0.25);
+  }
+  /* Cinematic display headline: tighter tracking, optical balance. */
+  .font-display {
+    font-family: var(--font-display), var(--font-geist-sans), sans-serif;
+    letter-spacing: -0.02em;
   }
   .grid-bg {
     background-image:

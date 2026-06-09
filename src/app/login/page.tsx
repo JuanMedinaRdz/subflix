@@ -172,7 +172,7 @@ export default function LoginPage() {
             <>
               <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Get a one-time code by email — no password needed.
+                Get a one-time code by email. No password needed.
               </p>
 
               <form onSubmit={handleSendCode} className="mt-6 space-y-4">
@@ -201,7 +201,7 @@ export default function LoginPage() {
                     <Link href="/" className="underline">
                       demo
                     </Link>{" "}
-                    instead — all features work locally with seed data.
+                    instead. All features work locally with seed data.
                   </p>
                 )}
 

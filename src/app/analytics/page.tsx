@@ -45,11 +45,13 @@ const COLORS = [
 ];
 
 const tooltipStyle = {
-  background: "rgba(10, 12, 20, 0.95)",
+  background: "rgba(9, 9, 11, 0.95)",
   border: "1px solid rgba(255,255,255,0.08)",
   borderRadius: 12,
   fontSize: 12
 };
+
+const ACCENT = "hsl(252 90% 66%)";
 
 export default function AnalyticsPage() {
   const { subscriptions } = useSubscriptions();
@@ -70,32 +72,28 @@ export default function AnalyticsPage() {
 
   return (
     <AppShell title="Analytics" subtitle="Insights across your subscription portfolio">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
         <MetricCard
           label="Monthly cost"
           value={formatCurrency(monthly)}
           icon={DollarSign}
-          accent="from-brand-400 to-brand-700"
         />
         <MetricCard
           label="Yearly cost"
           value={formatCurrency(yearly)}
           icon={TrendingUp}
           delta={yoy}
-          accent="from-purple-400 to-purple-700"
         />
         <MetricCard
           label="Avg / subscription"
           value={formatCurrency(avg)}
           icon={Layers}
-          accent="from-cyan-400 to-blue-700"
         />
         <MetricCard
           label="Most expensive"
-          value={top[0]?.name ?? "—"}
+          value={top[0]?.name ?? "Not set"}
           hint={top[0] ? formatCurrency(top[0].value) + " / mo" : ""}
           icon={Crown}
-          accent="from-amber-400 to-orange-700"
         />
       </div>
 
@@ -116,9 +114,9 @@ export default function AnalyticsPage() {
                   <Line
                     type="monotone"
                     dataKey="spend"
-                    stroke="hsl(226 100% 64%)"
+                    stroke={ACCENT}
                     strokeWidth={2.5}
-                    dot={{ fill: "hsl(226 100% 64%)", r: 3 }}
+                    dot={{ fill: ACCENT, r: 3 }}
                     activeDot={{ r: 6 }}
                   />
                 </LineChart>

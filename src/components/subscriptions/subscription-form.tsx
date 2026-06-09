@@ -54,7 +54,7 @@ export function SubscriptionFormDialog({
     price: 0,
     billingCycle: "monthly" as BillingCycle,
     nextRenewal: new Date().toISOString().slice(0, 10),
-    color: "#3366ff",
+    color: "#7c5cff",
     logo: "",
     status: "active" as SubscriptionStatus
   });
@@ -81,7 +81,7 @@ export function SubscriptionFormDialog({
         price: 0,
         billingCycle: "monthly",
         nextRenewal: new Date().toISOString().slice(0, 10),
-        color: "#3366ff",
+        color: "#7c5cff",
         logo: "",
         status: "active"
       });
@@ -97,7 +97,7 @@ export function SubscriptionFormDialog({
       description: form.description.trim() || undefined,
       category: form.category,
       price: Number(form.price) || 0,
-      currency: "USD",
+      currency: "MXN",
       billingCycle: form.billingCycle,
       nextRenewal: new Date(form.nextRenewal).toISOString(),
       color: form.color,
@@ -146,7 +146,7 @@ export function SubscriptionFormDialog({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-1.5">
-              <Label htmlFor="price">Price (USD)</Label>
+              <Label htmlFor="price">Price (MXN)</Label>
               <Input
                 id="price"
                 type="number"

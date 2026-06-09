@@ -54,8 +54,8 @@ export default function SubscriptionsPage() {
       title="Subscriptions"
       subtitle={`${subscriptions.length} tracked subscriptions`}
     >
-      <div className="flex flex-col md:flex-row gap-3 md:items-center md:justify-between">
-        <div className="flex flex-1 gap-2 max-w-2xl">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-1 gap-2 md:max-w-2xl">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
@@ -70,7 +70,7 @@ export default function SubscriptionsPage() {
             value={category}
             onValueChange={(v) => setCategory(v as (typeof categories)[number])}
           >
-            <SelectTrigger className="w-44">
+            <SelectTrigger className="w-32 shrink-0 sm:w-44">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -83,10 +83,16 @@ export default function SubscriptionsPage() {
           </Select>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" onClick={reset} title="Reset to demo data">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={reset}
+            title="Reset to demo data"
+          >
             <RotateCcw className="h-3.5 w-3.5" /> Reset demo
           </Button>
           <Button
+            className="flex-1 md:flex-none"
             onClick={() => {
               setMode({ kind: "create" });
               setOpen(true);

@@ -76,28 +76,24 @@ export default function DashboardPage() {
           icon={<Wallet className="h-4 w-4" />}
           label="Monthly"
           value={formatCurrency(monthly)}
-          accent="from-brand-400/60 to-brand-700/60"
           testId="metric-monthly"
         />
         <MetricChip
           icon={<TrendingUp className="h-4 w-4" />}
           label="Yearly"
           value={formatCurrency(yearly)}
-          accent="from-purple-400/60 to-purple-700/60"
           testId="metric-yearly"
         />
         <MetricChip
           icon={<CreditCard className="h-4 w-4" />}
           label="Active"
           value={String(active.length)}
-          accent="from-emerald-400/60 to-emerald-700/60"
           testId="metric-active"
         />
         <MetricChip
           icon={<CalendarClock className="h-4 w-4" />}
           label="Renewing in 30d"
           value={String(upcoming.length)}
-          accent="from-amber-400/60 to-orange-700/60"
           testId="metric-renewals"
         />
       </div>
@@ -111,7 +107,7 @@ export default function DashboardPage() {
               {past.length} subscription{past.length > 1 ? "s are" : " is"} overdue
             </p>
             <p className="text-xs text-muted-foreground">
-              {past.map((s) => s.name).join(", ")} — review their renewal dates.
+              {past.map((s) => s.name).join(", ")}. Review their renewal dates.
             </p>
           </div>
         </div>
@@ -224,30 +220,28 @@ function MetricChip({
   icon,
   label,
   value,
-  accent,
   testId
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
-  accent: string;
   testId?: string;
 }) {
   return (
     <div
       data-testid={testId}
-      className="relative overflow-hidden rounded-xl glass px-4 py-3 flex items-center gap-3"
+      className="flex items-center gap-3 rounded-xl border border-border/60 bg-card/40 px-4 py-3.5"
     >
-      <div
-        className={`flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br text-white ${accent}`}
-      >
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-secondary text-muted-foreground">
         {icon}
       </div>
       <div className="min-w-0">
         <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
           {label}
         </p>
-        <p className="text-base font-semibold tabular-nums truncate">{value}</p>
+        <p className="truncate font-display text-lg font-bold tabular-nums">
+          {value}
+        </p>
       </div>
     </div>
   );
