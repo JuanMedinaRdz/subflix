@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls \"c:/Users/ghost/Visual Studio Code Projects/\" 2>&1 | head -30)",
+      "Read(//c/Users/ghost/Visual Studio Code Projects/**)",
+      "Bash(curl -s \"https://api.github.com/users/JuanMedinaRdz/repos?sort=updated&per_page=30\")",
+      "Bash(PORTFOLIO=\"c:/Users/ghost/Visual Studio Code Projects/claude_code_curso/tema_2\"; ls \"$PORTFOLIO/public\" 2>&1 | grep -i -E \"resume|cv\" ; echo \"---\"; ls \"c:/Users/ghost/Downloads\" 2>&1 | grep -i -E \"cv|resume|medina\" | head)",
+      "Read(//c/Users/ghost/Downloads/**)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\ghost\\Visual Studio Code Projects\\claude_code_curso\\tema_2\\src\\content",
+      "c:\\Users\\ghost\\Visual Studio Code Projects\\claude_code_curso\\tema_2\\public\\images\\projects"
+    ]
+  }
+}

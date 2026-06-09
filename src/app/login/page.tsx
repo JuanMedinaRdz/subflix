@@ -49,7 +49,7 @@ export default function LoginPage() {
 
   const handleVerify = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (code.length !== 6) return;
+    if (code.length < 6) return;
     setStatus("verifying");
     setError(null);
     const { error } = await verifyOtp(email.trim(), code);
@@ -99,7 +99,7 @@ export default function LoginPage() {
                 Enter your code
               </h1>
               <p className="text-sm text-muted-foreground mt-1">
-                We sent a 6-digit code to{" "}
+                We sent a one-time code to{" "}
                 <span className="text-foreground font-medium">{email}</span>.
               </p>
 
@@ -113,13 +113,13 @@ export default function LoginPage() {
                     inputMode="numeric"
                     autoComplete="one-time-code"
                     pattern="[0-9]*"
-                    maxLength={6}
+                    maxLength={8}
                     required
-                    placeholder="123456"
-                    className="text-center text-2xl font-semibold tracking-[0.5em]"
+                    placeholder="12345678"
+                    className="text-center text-2xl font-semibold tracking-[0.4em]"
                     value={code}
                     onChange={(e) =>
-                      setCode(e.target.value.replace(/\D/g, "").slice(0, 6))
+                      setCode(e.target.value.replace(/\D/g, "").slice(0, 8))
                     }
                     disabled={status === "verifying"}
                     data-testid="login-code"
@@ -135,7 +135,7 @@ export default function LoginPage() {
                 <Button
                   type="submit"
                   className="w-full"
-                  disabled={code.length !== 6 || status === "verifying"}
+                  disabled={code.length < 6 || status === "verifying"}
                   data-testid="login-verify"
                 >
                   {status === "verifying" ? (
@@ -172,7 +172,7 @@ export default function LoginPage() {
             <>
               <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
               <p className="text-sm text-muted-foreground mt-1">
-                Get a one-time 6-digit code by email — no password needed.
+                Get a one-time code by email — no password needed.
               </p>
 
               <form onSubmit={handleSendCode} className="mt-6 space-y-4">
